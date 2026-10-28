@@ -72,7 +72,7 @@ As extensões são comparadas em minúsculas: `FOTO.JPG` também é reconhecido.
 
 **Não** precisa instalar Python!
 
-1. Acesse a [página de versões](ainda nao tem!!).
+1. Acesse a [página de versões](https://github.com/caadu999/OrganizadorDeArquivos/releases/tag/v1.0.0).
 2. Na seção **Assets**, baixe `Organizador.exe`.
 3. Abra o executável.
 4. Selecione a pasta e confirme a organização.
