@@ -1,7 +1,7 @@
 import shutil
 from pathlib import Path
 from tkinter.filedialog import askdirectory
-from tkinter.messagebox import askyesno, showinfo
+from tkinter.messagebox import askyesno, showerror, showinfo
 
 
 def identificar_arquivos(arquivo):
@@ -41,15 +41,17 @@ def gerar_nome_arquivo(arquivo, destino):
 def mover_arquivos(arquivo, destino):
     try:
         shutil.move(arquivo, destino)
-    except shutil.Error as e:
-        print(f"Erro ao mover o arquivo {arquivo.name}: {e}")
+    except (OSError, shutil.Error) as e:
+        showerror(title="Erro", message=f"Erro ao mover o arquivo {arquivo.name}: {e}")
+        return False
     else:
-        print(f"Arquivo {arquivo.name} movido para a pasta {destino.parent.name}")
+        return True
 
 
 def main(caminho: str):
     base = Path(caminho)
     pasta_organizada = base / "Organizador"
+    movidos = 0
 
     for arquivo in base.iterdir():
         if not arquivo.is_file():
@@ -66,7 +68,14 @@ def main(caminho: str):
             pasta.mkdir(parents=True, exist_ok=True)
 
         destino = gerar_nome_arquivo(arquivo, pasta)
-        mover_arquivos(arquivo, destino)
+
+        if mover_arquivos(arquivo, destino):
+            movidos += 1
+
+    showinfo(
+        title="Resultado",
+        message=f"{movidos} arquivo(s) movido(s) com sucesso para {pasta_organizada}",
+    )
 
 
 if __name__ == "__main__":
@@ -74,8 +83,8 @@ if __name__ == "__main__":
 
     if pasta_computador:
         confirmacao = askyesno(
-            title="Confirmação",
-            message=f"Você selecionou a pasta:\n{pasta_computador}\n\nDeseja continuar?",
+            title="Confirmar Organização",
+            message=f"Você selecionou a pasta:\n{Path(pasta_computador).name}\n\nArquivos dentro de subpastas não serão alterados.\n\nDeseja continuar?",
         )
         if confirmacao:
             main(pasta_computador)

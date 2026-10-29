@@ -1,6 +1,6 @@
 # 📂 Organizador de Arquivos
 
-Organize os arquivos soltos de uma pasta por categoria com Python. Escolha a pasta em uma janela, confirme a operação e o programa distribui os arquivos em subpastas como **Fotos**, **Vídeos**, **PDF** e **Planilhas**.
+Organize os arquivos soltos de uma pasta por categoria. Escolha a pasta em uma janela, confirme a operação e o programa distribui os arquivos em subpastas como **Fotos**, **Vídeos**, **PDF** e **Planilhas**.
 
 
 ## Como funciona
@@ -70,8 +70,6 @@ As extensões são comparadas em minúsculas: `FOTO.JPG` também é reconhecido.
 
 ## 📥 Baixar e usar
 
-**Não** precisa instalar Python!
-
 1. Acesse a [página de versões](https://github.com/caadu999/OrganizadorDeArquivos/releases/tag/v1.0.0).
 2. Na seção **Assets**, baixe `Organizador.exe`.
 3. Abra o executável.
@@ -134,12 +132,12 @@ Evite cadastrar a mesma extensão em categorias diferentes: a primeira correspon
 | `mover_arquivos()` | Mover o arquivo e informar o resultado |
 | `main()` | Percorrer os arquivos e coordenar a organização |
 
-## Cuidados e limitações
+## Cuidados
 
 - **Os arquivos são movidos, não copiados.** Não há desfazer automático nem backup. Teste inicialmente em uma pasta com cópias.
 - Finalize os downloads e feche arquivos que possam estar em uso antes de executar. O programa não detecta se um download terminou.
 - A escolha de nomes trata conflitos encontrados durante a execução, mas não oferece garantia contra outro programa ocupar o mesmo nome entre a verificação e a movimentação. Evite executar duas instâncias sobre a mesma pasta.
-- Ainda Não há arquivo de log, modo de simulação ou relatório final implementados.
+- Evite organizar arquivos de projetos que dependam de outros arquivos próximos: mudar a localização pode quebrar referências.
 
 
 ## Tecnologias
@@ -150,4 +148,3 @@ Evite cadastrar a mesma extensão em categorias diferentes: a primeira correspon
 - **Tkinter:** seleção de pasta e confirmação.
 - **PyInstaller:** empacotamento para distribuição.
 
-**sz**
