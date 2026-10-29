@@ -1,5 +1,7 @@
 import shutil
+import tkinter as tk
 from pathlib import Path
+from tkinter import ttk
 from tkinter.filedialog import askdirectory
 from tkinter.messagebox import askyesno, showerror, showinfo
 
@@ -42,7 +44,11 @@ def mover_arquivos(arquivo, destino):
     try:
         shutil.move(arquivo, destino)
     except (OSError, shutil.Error) as e:
-        showerror(title="Erro", message=f"Erro ao mover o arquivo {arquivo.name}: {e}")
+        showerror(
+            parent=janela,
+            title="Erro",
+            message=f"Erro ao mover o arquivo {arquivo.name}: {e}",
+        )
         return False
     else:
         return True
@@ -78,17 +84,74 @@ def main(caminho: str):
     )
 
 
-if __name__ == "__main__":
-    pasta_computador = askdirectory(title="Selecione a pasta que deseja organizar")
+def selecionar_e_organizar():
+    pasta_computador = askdirectory(
+        parent=janela,
+        title="Selecione a pasta que deseja organizar",
+    )
 
-    if pasta_computador:
-        confirmacao = askyesno(
-            title="Confirmar Organização",
-            message=f"Você selecionou a pasta:\n{Path(pasta_computador).name}\n\nArquivos dentro de subpastas não serão alterados.\n\nDeseja continuar?",
+    if not pasta_computador:
+        return
+
+    confirmacao = askyesno(
+        parent=janela,
+        title="Confirmar organização",
+        message=(
+            f"Pasta selecionada:\n{Path(pasta_computador).name}\n\n"
+            "Os arquivos soltos reconhecidos serão movidos "
+            "para a pasta Organizador.\n\n"
+            "Arquivos dentro de subpastas não serão alterados.\n\n"
+            "Deseja continuar?"
+        ),
+    )
+
+    if not confirmacao:
+        return
+
+    try:
+        main(pasta_computador)
+    except OSError as erro:
+        showerror(
+            parent=janela,
+            title="Organização interrompida",
+            message=(
+                f"Não foi possível concluir:\n{erro}\n\n"
+                "Os arquivos já movidos permanecem no destino."
+            ),
         )
-        if confirmacao:
-            main(pasta_computador)
-        else:
-            showinfo(title="Cancelado", message="A organização da pasta foi cancelada.")
-    else:
-        showinfo(title="Cancelado", message="Nenhuma pasta foi selecionada.")
+
+
+if __name__ == "__main__":
+    janela = tk.Tk()
+    janela.title("Organizador de Arquivos")
+    janela.geometry("440x240")
+    janela.resizable(False, False)
+
+    ttk.Label(
+        janela,
+        text="Organizador de Arquivos",
+        font=("Segoe UI", 17, "bold"),
+    ).pack(pady=(25, 12))
+
+    ttk.Label(
+        janela,
+        text=(
+            "Escolha uma pasta para separar os arquivos por categoria.\n"
+            "Os arquivos dentro das subpastas serão preservados."
+        ),
+        justify="center",
+    ).pack(pady=(0, 20))
+
+    ttk.Button(
+        janela,
+        text="Selecionar pasta e organizar",
+        command=selecionar_e_organizar,
+    ).pack(pady=5)
+
+    ttk.Button(
+        janela,
+        text="Sair",
+        command=janela.destroy,
+    ).pack(pady=5)
+
+    janela.mainloop()
